@@ -1,3 +1,5 @@
+''' Script for parsing and operating on the 'POET' log file '''
+
 import argparse
 import log_parser as LP
 import config
@@ -7,6 +9,7 @@ import math
 from decimal import Decimal
 log_data = {}
 
+# Returns the hearbeat index deltas between rows
 def heartbeat_window(log_data = log_data):
     ret = []
     key = 'HB_NUM'
@@ -30,7 +33,8 @@ def heartbeat_window(log_data = log_data):
 
     return ret
 
-def heartbeat_difference(log_data, first_key, second_key, flip_first = False, flip_second = False):
+# Returns a list of differences between the row values of two rows
+def poet_difference(log_data, first_key, second_key, flip_first = False, flip_second = False):
     ret = []
     try:
         assert first_key in log_data, 'Log data does not contain \'%s\n\'' % first_key
@@ -52,6 +56,8 @@ def heartbeat_difference(log_data, first_key, second_key, flip_first = False, fl
         
     return ret
 
+# Main function used when operating solely from this script
+# UNSTABLE: Will change as tests are done on the script
 def main():
     global log_data
     parser = argparse.ArgumentParser()
@@ -72,7 +78,7 @@ def main():
         #    if d != 0:
         #        print (d)
 
-    diff_rate_err = heartbeat_difference(log_data, 'HB_RATE', 'ERROR', flip_second=True)
+    diff_rate_err = poet_difference(log_data, 'HB_RATE', 'ERROR', flip_second=True)
 
 if __name__ == '__main__':
 	main()

@@ -1,6 +1,10 @@
 import argparse
 import config
 
+'''
+Function for parsing a singe line from a "standard" log file.
+The standard being the way 'POET' logs and 'Heartbeat' logs are set up.
+'''
 def parse_line(line):
     data = line.strip().strip('\n').split(' ')
     data = list(filter(None, data))
@@ -9,18 +13,23 @@ def parse_line(line):
 
 def parse_data(file):
     line = file.readline()
+
+    # Parse headers
     headers = parse_line(line)
 
+    # Make sure headers are as expected
     if len(headers) < 1:
         return None
     for h in headers:
         if type(h) != str or len(h) < 1:
             return None
     data = dict()
+
+    # Create a list for each header
     for h in headers:
         data[h] = list()
 
-    # Parse
+    # Parse data
     lines = file.readlines()
     for l in lines:
         l = parse_line(l)
@@ -31,6 +40,22 @@ def parse_data(file):
 
     return data
 
+'''
+Opens a log file and creates a dictionary of lists.
+The keys are the header of a row and 'value[i]' is the value of row 'i' for  'dict[key]'
+Returns an empty dictionary if something fails
+'''
+def collect_log_data(path) :
+    log_data = dict()
+
+    try:
+        file = open(log_file, 'r')
+        log_data = parse_data(file)
+        file.close()
+    except:
+        log_data = dict()
+
+    return log_data
 
 def main():
     parser = argparse.ArgumentParser()

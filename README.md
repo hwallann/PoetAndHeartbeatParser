@@ -42,17 +42,24 @@ _For More information check your documentation folder_
 |------|--------------|
 |  Beat  | Incrementing counter for each time heartbeat has been called |
 |  Tag  | Index for loggin of heartbeat. Increases for each heartbeat log |
-|  Timestamp  | Time when current heartbeat happened. On unix systems the time is given as nanosecond timestamps. See python time.time() |
-|  Global_Rate  | NONE |
+|  Timestamp  | Time when current heartbeat happened. On unix systems the time is given as nanosecond timestamps. See **python** ```time.time()``` |
+|  Global_Rate  | Average rate of `heartbeats` per second from first timestamp |
+|  Global_Rate  | Returns the heart rate over the life of the entire application |
 |  Window_Rate  | Used by `POET` |
-|  Instant_Rate  | NONE |
+|  Window_Rate  | Average rate of `heartbeats` per second this window |
+|  Window_Rate  | Returns the heart rate over the last window (as specified to init) |
+|  Instant_Rate  | The rate of `heartbeats` per second this if one only takes a look at the current heartbeat and its predecessor taking only this `heartbeat` and its predecessor into consideration |
+|  Instant_Rate  |Returns the heart rate for the last heartbeat. |
 |  Global_Accuracy  | NONE |
 |  Window_Accuracy  | NONE |
 |  Instant_Accuracy  | NONE |
-|  Global_Power  | NONE |
+|  Global_Power  | Total power from the first `heartbeat` to the current `heartbeat tag` |
+|  Global_Power  | The power (double) over the entire life of the application |
 |  Window_Power  | Used by `POET` |
-|  Instant_Power   | NONE |
+|  Window_Power  | The power (double) over the last window |
+|  Instant_Power   | The power (double) for the last heartbeat |
   
+_NOTE: Information regarding `Power` description has been collected from `heartbeats/inc/heartbeat-accuracy-power.h` and `heartbeats/src/heartbeat-accuracy-power-shared.c`  
 #### Documentation creation  
 _Documentation stored as ```refman.pdf```_.  
 _Note: Field descriptions are usless/non-existent_.  
