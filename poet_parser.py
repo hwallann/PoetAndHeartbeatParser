@@ -5,6 +5,7 @@ import log_parser as LP
 import config
 import time
 import math
+import plotting.PoetPlotter as pp
 
 from decimal import Decimal
 log_data = {}
@@ -56,6 +57,37 @@ def poet_difference(log_data, first_key, second_key, flip_first = False, flip_se
         
     return ret
 
+def plot_wanted_speed(log_data, normalize = False, window_size = 0) :
+    x_key = 'HB_NUM'
+    work_key = 'WORKLOAD'
+    error_key = 'ERROR'
+    try:
+        assert x_key in log_data, 'Log data does not contain \'%s\n\'' % x_key
+        assert work_key in log_data, 'Log data does not contain \'%s\n\'' % work_key
+        assert error_key in log_data, 'Log data does not contain \'%s\n\'' % error_key
+
+        x = list()
+        y = list()
+        if normalize :
+            ws = window_size
+            if ws == 0 :
+                ws = int(log_data[x_key][1]) - int(log_data[x_key][0])
+
+            for element in log_data[x_key] :
+                x.append(int(element) / ws)
+        else :
+            x = log_data[x_key]
+
+        for idx in range(len(log_data[work_key])) :
+            dw = Decimal(log_data[work_key][idx])
+            de = Decimal(log_data[error_key][idx])
+            y.append(dw * de)
+
+        pp.create_simple_fig(x, y)
+
+    except Exception as e:
+        print(e)
+
 # Main function used when operating solely from this script
 # UNSTABLE: Will change as tests are done on the script
 def main():
@@ -79,6 +111,7 @@ def main():
         #        print (d)
 
     diff_rate_err = poet_difference(log_data, 'HB_RATE', 'ERROR', flip_second=True)
+    plot_wanted_speed(log_data, normalize = True)
 
 if __name__ == '__main__':
 	main()

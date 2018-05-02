@@ -1,5 +1,7 @@
 import argparse
 import config
+import plotting.PoetPlotter as pp
+import os
 
 '''
 Function for parsing a singe line from a "standard" log file.
@@ -57,6 +59,23 @@ def collect_log_data(path) :
 
     return log_data
 
+def plot_rate(log_data) :
+    x_key = 'HB_NUM'
+    y_key = 'HB_RATE'
+
+    try:
+        assert x_key in log_data, 'Log data does not contain \'%s\n\'' % x_key
+        assert y_key in log_data, 'Log data does not contain \'%s\n\'' % y_key
+
+        x = log_data[x_key]
+        y = log_data[y_key]
+
+        pp.create_simple_fig(x, y)
+
+    except Exception as e:
+        print(e)
+        
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--log_type', type=str,
@@ -72,10 +91,11 @@ def main():
         if log_type == 'p' or log_type == 'poet':
             log_file = config.POET_LOG
 
-    file = open(log_file, 'r')
+    file = open(os.getcwd() + path, 'r')
     log_data = parse_data(file)
     file.close()
 
+    plot_rate(log_data)
     # print(log_data)
 
 if __name__ == '__main__':
